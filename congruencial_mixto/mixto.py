@@ -55,13 +55,25 @@ def imprimir_tabla(resultados):
         )
 
 
+def pedir_entero(mensaje: str) -> int:
+    """Pide un entero por consola hasta que el usuario ingrese uno valido."""
+    while True:
+        try:
+            return int(input(mensaje))
+        except ValueError:
+            print("Entrada invalida. Debes ingresar un numero entero.")
+
+
 if __name__ == "__main__":
-    # Ejemplo del apunte: a=5, c=7, m=8, x0=4.
-    x0 = 4
-    a = 5
-    c = 7
-    m = 8
-    cantidad = 10
+    print("Metodo Congruencial Lineal Mixto")
+    print("-" * 40)
+
+    # Entradas para ejecutar el metodo desde consola.
+    x0 = pedir_entero("Semilla inicial x0: ")
+    a = pedir_entero("Multiplicador a: ")
+    c = pedir_entero("Constante aditiva c: ")
+    m = pedir_entero("Modulo m: ")
+    cantidad = pedir_entero("Cantidad de numeros a generar: ")
 
     serie = congruencial_mixto(x0, a, c, m, cantidad)
     imprimir_tabla(serie)

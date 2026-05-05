@@ -71,11 +71,23 @@ def imprimir_tabla(resultados):
         )
 
 
+def pedir_entero(mensaje: str) -> int:
+    """Pide un entero por consola hasta que el usuario ingrese uno valido."""
+    while True:
+        try:
+            return int(input(mensaje))
+        except ValueError:
+            print("Entrada invalida. Debes ingresar un numero entero.")
+
+
 if __name__ == "__main__":
-    # Ejemplo parecido al de clase: semilla de 3 digitos.
-    semilla_inicial = 154
-    n_digitos = 3
-    cantidad = 10
+    print("Metodo de Von Neumann (Cuadrado Medio)")
+    print("-" * 40)
+
+    # Entradas para usar el metodo desde consola.
+    n_digitos = pedir_entero("Cantidad de digitos de la semilla (n): ")
+    semilla_inicial = pedir_entero("Semilla inicial: ")
+    cantidad = pedir_entero("Cantidad de numeros a generar: ")
 
     serie = von_neumann(semilla_inicial, n_digitos, cantidad)
     imprimir_tabla(serie)
