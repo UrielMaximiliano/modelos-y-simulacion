@@ -6,53 +6,30 @@ Plataforma web para visualizar y comparar 6 métodos de generación de números 
 
 ## Cómo ejecutar
 
-### 1. Clonar el repositorio
+### Opción rápida (Windows)
 
 ```bash
 git clone https://github.com/UrielMaximiliano/modelos-y-simulacion.git
 cd modelos-y-simulacion
+iniciar.bat
 ```
 
-### 2. Crear el entorno virtual (solo la primera vez)
+Hace doble click en `iniciar.bat` o ejecutalo desde la terminal. Crea el entorno, instala Flask y levanta el servidor automáticamente.
+
+Después abrí **http://127.0.0.1:5000** en el navegador.
+
+### Opción manual
 
 ```bash
+git clone https://github.com/UrielMaximiliano/modelos-y-simulacion.git
+cd modelos-y-simulacion
 python -m venv venv
-```
-
-### 3. Activar el entorno virtual
-
-**Windows (PowerShell):**
-```powershell
-.\venv\Scripts\Activate.ps1
-```
-
-**Windows (CMD):**
-```cmd
-venv\Scripts\activate.bat
-```
-
-**Linux / Mac:**
-```bash
-source venv/bin/activate
-```
-
-### 4. Instalar dependencias (solo la primera vez)
-
-```bash
+.\venv\Scripts\Activate.ps1      # Windows PowerShell
 pip install -r requirements.txt
-```
-
-### 5. Levantar el servidor
-
-```bash
 python app.py
 ```
 
-### 6. Abrir en el navegador
-
-Ir a **http://127.0.0.1:5000**
-
-Desde ahí se navegan los 6 métodos con el menú lateral.
+Abrir **http://127.0.0.1:5000**
 
 ---
 
