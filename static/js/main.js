@@ -1,8 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
     // Referencias a los gráficos
-    let chartFibo1 = null;
-    let chartFibo2 = null;
-    let chartCongruencial = null;
+    const charts = {};
 
     // Función auxiliar para agrupar datos en intervalos (Histograma)
     function calculateFrequencies(data, numBins = 10) {
@@ -13,6 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const val = item.r_n_raw;
             let binIndex = Math.floor(val / binSize);
             if (binIndex >= numBins) binIndex = numBins - 1; // Para valores que sean exactamente 1.0
+            if (binIndex < 0) binIndex = 0;
             bins[binIndex]++;
         });
 
@@ -26,14 +25,14 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Renderizar Gráfico
-    function renderChart(canvasId, title, chartRef, frequencies, color) {
+    function renderChart(canvasId, title, frequencies, color) {
         const ctx = document.getElementById(canvasId).getContext('2d');
         
-        if (chartRef) {
-            chartRef.destroy();
+        if (charts[canvasId]) {
+            charts[canvasId].destroy();
         }
 
-        return new Chart(ctx, {
+        charts[canvasId] = new Chart(ctx, {
             type: 'bar',
             data: {
                 labels: frequencies.labels,
@@ -55,12 +54,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 scales: {
                     y: {
                         beginAtZero: true,
-                        grid: { color: 'rgba(255, 255, 255, 0.1)' },
-                        ticks: { color: '#cbd5e1' }
+                        grid: { color: 'rgba(255, 255, 255, 0.05)' },
+                        ticks: { color: 'rgba(255, 255, 255, 0.5)' }
                     },
                     x: {
                         grid: { display: false },
-                        ticks: { color: '#cbd5e1' }
+                        ticks: { color: 'rgba(255, 255, 255, 0.5)' }
                     }
                 }
             }
@@ -70,6 +69,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Actualizar Tabla (Solo 20 primeros)
     function updateTable(tableId, data) {
         const tbody = document.querySelector(`#${tableId} tbody`);
+        if (!tbody) return;
         tbody.innerHTML = '';
         
         const displayData = data.slice(0, 20);
@@ -84,21 +84,38 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Manejar Formularios
-    async function handleFormSubmit(e, apiEndpoint, tableId, canvasId, chartRefVar, color) {
+    // Manejar Formularios Generico
+    async function handleFormSubmit(e) {
         e.preventDefault();
         const form = e.target;
         const data = {};
         
         // Recoger todos los inputs del formulario
         Array.from(form.elements).forEach(el => {
-            if (el.tagName === 'INPUT') {
-                const key = el.id.split('-')[1]; // ej: f1-x0 -> x0
+            if (el.tagName === 'INPUT' && el.id) {
+                // extrae el nombre ignorando prefijos. Ej: gen-x0 -> x0
+                const parts = el.id.split('-');
+                const key = parts[parts.length - 1]; 
                 data[key] = el.value;
             }
         });
-        // Siempre generamos 1000
-        data.n = 1000;
+
+        const apiEndpoint = form.getAttribute('data-endpoint') || form.dataset.endpoint;
+        
+        // Determinar qué IDs usar para la tabla y gráfico
+        let tableId = 'table-generico';
+        let canvasId = 'chart-generico';
+        let color = 'rgba(16, 185, 129, 0.6)';
+
+        if (form.id === 'form-fibo-1') {
+            tableId = 'table-fibo-1'; canvasId = 'chart-fibo-1'; color = 'rgba(59, 130, 246, 0.6)';
+        } else if (form.id === 'form-fibo-2') {
+            tableId = 'table-fibo-2'; canvasId = 'chart-fibo-2'; color = 'rgba(139, 92, 246, 0.6)';
+        } else if (form.id === 'form-congruencial') {
+            tableId = 'table-congruencial'; canvasId = 'chart-congruencial'; color = 'rgba(16, 185, 129, 0.6)';
+        } else if (form.id === 'form-generico') {
+             tableId = 'table-generico'; canvasId = 'chart-generico'; color = 'rgba(16, 185, 129, 0.6)';
+        }
 
         try {
             const response = await fetch(apiEndpoint, {
@@ -109,36 +126,23 @@ document.addEventListener('DOMContentLoaded', () => {
             const results = await response.json();
 
             updateTable(tableId, results);
-            
             const freqs = calculateFrequencies(results);
-            if (chartRefVar === 'chartFibo1') {
-                chartFibo1 = renderChart(canvasId, 'Frecuencia', chartFibo1, freqs, color);
-            } else if (chartRefVar === 'chartFibo2') {
-                chartFibo2 = renderChart(canvasId, 'Frecuencia', chartFibo2, freqs, color);
-            } else {
-                chartCongruencial = renderChart(canvasId, 'Frecuencia', chartCongruencial, freqs, color);
-            }
+            renderChart(canvasId, 'Frecuencia', freqs, color);
 
         } catch (error) {
             console.error('Error generando datos:', error);
         }
     }
 
-    // Listeners
-    document.getElementById('form-fibo-1').addEventListener('submit', (e) => {
-        handleFormSubmit(e, '/api/generar/fibonacci', 'table-fibo-1', 'chart-fibo-1', 'chartFibo1', 'rgba(59, 130, 246, 0.6)');
+    // Vincular todos los formularios de la página (dinámico)
+    const forms = document.querySelectorAll('form');
+    forms.forEach(form => {
+        form.addEventListener('submit', handleFormSubmit);
+        // Autodisparar si hay un boton de submit
+        const submitBtn = form.querySelector('button[type="submit"]');
+        if (submitBtn) {
+            submitBtn.click();
+        }
     });
 
-    document.getElementById('form-fibo-2').addEventListener('submit', (e) => {
-        handleFormSubmit(e, '/api/generar/fibonacci', 'table-fibo-2', 'chart-fibo-2', 'chartFibo2', 'rgba(139, 92, 246, 0.6)');
-    });
-
-    document.getElementById('form-congruencial').addEventListener('submit', (e) => {
-        handleFormSubmit(e, '/api/generar/congruencial', 'table-congruencial', 'chart-congruencial', 'chartCongruencial', 'rgba(16, 185, 129, 0.6)');
-    });
-
-    // Disparar las generaciones iniciales por defecto
-    document.querySelector('#form-fibo-1 button').click();
-    document.querySelector('#form-fibo-2 button').click();
-    document.querySelector('#form-congruencial button').click();
 });

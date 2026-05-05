@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modelos y Simulación</title>
+    <!-- Frontend Design Skill: Distinctive Typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="noise-overlay"></div>
+    
+    <div class="app-container">
+        <!-- Menú lateral de navegación global -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2>Simulación</h2>
+                <p>Generadores Aleatorios</p>
+            </div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li class="{% if active_page == 'fibonacci' %}active{% endif %}">
+                        <a href="/">1. Fibonacci</a>
+                    </li>
+                    <li class="{% if active_page == 'von_neuman' %}active{% endif %}">
+                        <a href="/von_neuman">2. Von Neumann</a>
+                    </li>
+                    <li class="{% if active_page == 'producto_medio' %}active{% endif %}">
+                        <a href="/producto_medio">3. Producto Medio</a>
+                    </li>
+                    <li class="{% if active_page == 'congruencial_multiplicativo' %}active{% endif %}">
+                        <a href="/congruencial_multiplicativo">4. Congruencial Mult.</a>
+                    </li>
+                    <li class="{% if active_page == 'congruencial_mixto' %}active{% endif %}">
+                        <a href="/congruencial_mixto">5. Congruencial Mixto</a>
+                    </li>
+                    <li class="{% if active_page == 'congruencial_aditivo' %}active{% endif %}">
+                        <a href="/congruencial_aditivo">6. Congruencial Aditivo</a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Contenido Principal -->
+        <main class="main-content">
+            <div class="content-wrapper">
+                {% block content %}{% endblock %}
+            </div>
+        </main>
+    </div>
+    
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>

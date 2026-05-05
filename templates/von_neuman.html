@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<header class="page-header">
+    <h1>Von Neumann</h1>
+    <p>Método del cuadrado medio. Extrae los dígitos centrales de la semilla elevada al cuadrado.</p>
+</header>
+
+<div class="config-grid">
+    <section class="card">
+        <h3>Parámetros</h3>
+        <form id="form-generico" data-endpoint="/api/generar/von_neuman" class="config-form">
+            <div class="input-group">
+                <label>Semilla</label>
+                <input type="number" id="gen-semilla" value="1234" required>
+            </div>
+            <div class="input-group">
+                <label>Dígitos (n)</label>
+                <input type="number" id="gen-n_digitos" value="4" required>
+            </div>
+            <div class="input-group">
+                <label>Cantidad</label>
+                <input type="number" id="gen-n" value="1000" required>
+            </div>
+            <button type="submit" class="btn">Generar</button>
+        </form>
+    </section>
+
+    <div class="card chart-card">
+        <h3>Distribución</h3>
+        <canvas id="chart-generico"></canvas>
+    </div>
+</div>
+
+<div class="config-grid single">
+    <div class="card">
+        <h3>Primeros 20 valores</h3>
+        <div class="table-container">
+            <table id="table-generico">
+                <thead><tr><th>Iteración</th><th>X_n</th><th>R_n</th></tr></thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

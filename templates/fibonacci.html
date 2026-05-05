@@ -2,28 +2,28 @@
 
 {% block content %}
 <header class="page-header">
-    <h1>Método de Fibonacci (Aditivo)</h1>
-    <p>Ejercicio 2: Generación de 1000 valores en [0, 1] y comparativa con Método Congruencial.</p>
+    <h1>Método de Fibonacci</h1>
+    <p>Generación de 1000 valores en [0, 1] con dos configuraciones distintas y comparativa con un método congruencial lineal.</p>
 </header>
 
+<!-- Fibonacci Configs side by side -->
 <div class="config-grid">
-    <!-- Configuración 1 de Fibonacci -->
-    <section class="card config-card">
-        <h3>Configuración Fibonacci 1</h3>
-        <form id="form-fibo-1" class="config-form">
+    <section class="card">
+        <h3>Configuración 1</h3>
+        <form id="form-fibo-1" data-endpoint="/api/generar/fibonacci" class="config-form">
             <div class="input-group">
-                <label>Semilla X₀:</label>
+                <label>Semilla X₀</label>
                 <input type="number" id="f1-x0" value="7" required>
             </div>
             <div class="input-group">
-                <label>Semilla X₁:</label>
+                <label>Semilla X₁</label>
                 <input type="number" id="f1-x1" value="13" required>
             </div>
             <div class="input-group">
-                <label>Módulo m:</label>
+                <label>Módulo m</label>
                 <input type="number" id="f1-m" value="100" required>
             </div>
-            <button type="submit" class="btn">Generar 1000 Serie 1</button>
+            <button type="submit" class="btn">Generar Serie 1</button>
         </form>
         <div class="table-container">
             <table id="table-fibo-1">
@@ -33,23 +33,22 @@
         </div>
     </section>
 
-    <!-- Configuración 2 de Fibonacci -->
-    <section class="card config-card">
-        <h3>Configuración Fibonacci 2</h3>
-        <form id="form-fibo-2" class="config-form">
+    <section class="card">
+        <h3>Configuración 2</h3>
+        <form id="form-fibo-2" data-endpoint="/api/generar/fibonacci" class="config-form">
             <div class="input-group">
-                <label>Semilla X₀:</label>
+                <label>Semilla X₀</label>
                 <input type="number" id="f2-x0" value="1" required>
             </div>
             <div class="input-group">
-                <label>Semilla X₁:</label>
+                <label>Semilla X₁</label>
                 <input type="number" id="f2-x1" value="2" required>
             </div>
             <div class="input-group">
-                <label>Módulo m:</label>
+                <label>Módulo m</label>
                 <input type="number" id="f2-m" value="100" required>
             </div>
-            <button type="submit" class="btn btn-secondary">Generar 1000 Serie 2</button>
+            <button type="submit" class="btn btn-secondary">Generar Serie 2</button>
         </form>
         <div class="table-container">
             <table id="table-fibo-2">
@@ -60,7 +59,7 @@
     </section>
 </div>
 
-<!-- Gráficos de Fibonacci -->
+<!-- Histograms -->
 <div class="charts-section">
     <div class="card chart-card">
         <h3>Histograma Serie 1</h3>
@@ -74,31 +73,31 @@
 
 <!-- Comparativa Congruencial -->
 <header class="page-header mt-large">
-    <h2>Comparativa: Método Congruencial Lineal</h2>
+    <h2>Comparativa: Congruencial Lineal</h2>
     <p>Compara visualmente la distribución respecto a las configuraciones de Fibonacci.</p>
 </header>
 
 <div class="config-grid">
-    <section class="card config-card">
+    <section class="card">
         <h3>Configuración LCG</h3>
-        <form id="form-congruencial" class="config-form">
+        <form id="form-congruencial" data-endpoint="/api/generar/congruencial" class="config-form">
             <div class="input-group">
-                <label>Semilla X₀:</label>
+                <label>Semilla X₀</label>
                 <input type="number" id="c-x0" value="4" required>
             </div>
             <div class="input-group">
-                <label>Multiplicador a:</label>
+                <label>Multiplicador a</label>
                 <input type="number" id="c-a" value="5" required>
             </div>
             <div class="input-group">
-                <label>Incremento c:</label>
+                <label>Incremento c</label>
                 <input type="number" id="c-c" value="7" required>
             </div>
             <div class="input-group">
-                <label>Módulo m:</label>
+                <label>Módulo m</label>
                 <input type="number" id="c-m" value="8" required>
             </div>
-            <button type="submit" class="btn btn-accent">Generar 1000 LCG</button>
+            <button type="submit" class="btn">Generar LCG</button>
         </form>
         <div class="table-container">
             <table id="table-congruencial">
@@ -107,11 +106,10 @@
             </table>
         </div>
     </section>
-    
-    <section class="card chart-card" style="grid-column: span 1;">
+
+    <section class="card chart-card">
         <h3>Histograma LCG</h3>
         <canvas id="chart-congruencial"></canvas>
     </section>
 </div>
-
 {% endblock %}
